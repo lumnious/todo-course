@@ -7,6 +7,7 @@ var app = express();
 var PORT = process.env.PORT || 3000;
 var todos = [];
 
+
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
@@ -60,6 +61,18 @@ app.post('/todos', function(req, res) {
 
     db.todo.create(body).then(function(todo) {
         res.json(todo.toJSON());
+    }, function(e) {
+        res.status(400).json(e);
+    });
+});
+
+// POST /users
+app.post('/users', function(req, res) {
+    var body = _.pick(req.body, 'email', 'password');
+    body.email = body.email.trim();
+
+    db.user.create(body).then(function(user) {
+        res.json(user.toJSON());
     }, function(e) {
         res.status(400).json(e);
     });
